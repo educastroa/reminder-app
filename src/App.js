@@ -1,11 +1,12 @@
-import logo from './logo.svg';
-import './App.css';
+import SetFrequency from "./components/SetFrequency";
+
 
 function App() {
   return (
-    <h1 className="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+    <section className="bg-gray-900 font-Poppins flex  h-screen items-center justify-center">
+      <SetFrequency/>
+    </section>
+    
   );
 }
 
