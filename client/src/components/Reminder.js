@@ -81,7 +81,7 @@ export default function Remainder({ date, setDate }) {
         onSubmit={handleSubmit}
       >
         <div>
-          <label className="text-white">Reminder Name: </label>
+          <label className="text-white">Reminder eduardo: </label>
           <input
             onChange={handleChange}
             type="text"
