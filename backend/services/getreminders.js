@@ -4,19 +4,19 @@ AWS.config.update({
 });
 const util = require("../utils/util");
 
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
+const dynamobd = new AWS.DynamoDB.DocumentClient();
 const remainderTable = "reminderapp";
 
-async function getReminder() {
+
+async function getReminder(username, reminderName) {
   const params = {
     TableName: remainderTable,
     Key: {
-      username: 'eduardo',
-      SK: 'users'
+      username: username,
+      reminders: reminderName,
     },
   };
-
-  const results = await dynamoDb
+  return await dynamobd
     .get(params)
     .promise()
     .then(
@@ -24,11 +24,9 @@ async function getReminder() {
         return response.Item;
       },
       (error) => {
-        console.error("There is an error getting user: ", error);
+        console.error("There is an error getting remainder", error);
       }
     );
-    return util.buildResponse(200, JSON.stringify(results));
 }
-
 
 module.exports.getReminder = getReminder;
