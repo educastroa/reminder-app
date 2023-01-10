@@ -57,13 +57,48 @@ async function getReminder(requestBody) {
     );
 }
 
-async function updateReminder(requestBody){
+async function updateReminder(requestBody) {
 
 }
 
-async function deleteReminder(requestBody){
-  
+
+async function deleteReminder(requestBody) {
+  const username = requestBody.username;
+  const SK = requestBody.SK;
+
+  if (!username || !SK) {
+    return util.buildResponse(401, {
+      message: "missing data",
+    });
+  }
+
+  const params = {
+    TableName: remainderTable,
+    Key: {
+      username: username,
+      SK: `audit_${SK}`
+    },
+  };
+
+  let response = await dynamoDb
+    .delete(params)
+    .promise()
+    .then(
+      () => {
+        return true;
+      },
+      (error) => {
+        return util.buildResponse(500, {
+          message: "Error while deleting user. " + error,
+        });
+      }
+    );
+
+
+  return response;
 }
+
+
 
 async function saveReminder(reminder) {
   const params = {
