@@ -1,36 +1,32 @@
-const loginService = require("./services/login");
-const verifyService = require("./services/verify");
-const addReminderService = require("./services/addreminders");
-const getRemindersService = require("./services/getreminders");
+const reminderController = require("./controllers/reminderController");
+const loginController = require("./controllers/loginController");
+const verifyController = require("./controllers/verifyController");
+
 const util = require("./utils/util");
 
 const loginPath = "/login";
 const verifyPath = "/verify";
-const addReminderPath = "/addreminder";
-const getRemindersPath = "/getreminders";
+const reminderPath = "/reminder";
 
 exports.handler = async (event) => {
-  console.log("Request Event: ", event);
+
   let response;
+  let requestMethod = event.httpMethod;
+  let requestBody = event.body;
+
   switch (true) {
-    case event.httpMethod === "GET" && event.path === getRemindersPath:
-      const getRemindersBody = JSON.parse(event.body);
-      response = getRemindersService.getReminders(getRemindersBody);
+    case event.path === reminderPath:
+      response = reminderController.reminderRouter(requestMethod, requestBody);
       break;
-    case event.httpMethod === "POST" && event.path === addReminderPath:
-      const addReminderBody = JSON.parse(event.body);
-      response = addReminderService.addReminders(addReminderBody);
+    case event.path === loginPath:
+      response = loginController.loginRouter(requestMethod, requestBody);
       break;
-    case event.httpMethod === "POST" && event.path === loginPath:
-      const loginBody = JSON.parse(event.body);
-      response = loginService.login(loginBody);
-      break;
-    case event.httpMethod === "POST" && event.path === verifyPath:
-      const verifyBody = JSON.parse(event.body);
-      response = verifyService.verify(verifyBody);
+    case event.path === verifyPath:
+      response = verifyController.verifyRouter(requestMethod, requestBody);
       break;
     default:
-      response = util.buildResponse(404, "404 Not Found");
+      response = util.buildResponse(404, "404 Path not found");
   }
+
   return response;
 };
