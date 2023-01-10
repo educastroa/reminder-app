@@ -2,16 +2,17 @@ const AWS = require("aws-sdk");
 AWS.config.update({
   region: "us-east-2",
 });
+
 const util = require("../utils/util");
 
 const dynamobd = new AWS.DynamoDB.DocumentClient();
 const remainderTable = "reminderapp";
 
-async function addReminders(reminderInfo) {
-  const user = reminderInfo.username;
-  const reminderName = reminderInfo.reminderName;
-  const frequency = reminderInfo.frequency;
-  const type = reminderInfo.type;
+async function addReminder(requestBody) {
+  const user = requestBody.username;
+  const reminderName = requestBody.reminderName;
+  const frequency = requestBody.frequency;
+  const type = requestBody.type;
   if (!user || !frequency || !type || !reminderName) {
     return util.buildResponse(401, {
       message: "Missing data",
@@ -32,10 +33,10 @@ async function addReminders(reminderInfo) {
     });
   }
 
-  return util.buildResponse(200, { reminder: reminderInfo });
+  return util.buildResponse(200, { reminder: requestBody });
 }
 
-async function getReminder(username, reminderName) {
+async function getReminder(requestBody) {
   const params = {
     TableName: remainderTable,
     key: {
@@ -51,9 +52,17 @@ async function getReminder(username, reminderName) {
         return response.Item;
       },
       (error) => {
-        console.error("There is an error getting remainder", error);
+        console.error("There is an error getting the reminder", error);
       }
     );
+}
+
+async function updateReminder(requestBody){
+
+}
+
+async function deleteReminder(requestBody){
+  
 }
 
 async function saveReminder(reminder) {
@@ -69,9 +78,12 @@ async function saveReminder(reminder) {
         return true;
       },
       (error) => {
-        console.error("There is an error saving reminder", error);
+        console.error("There is an error saving the reminder", error);
       }
     );
 }
 
-module.exports.addReminders = addReminders;
+module.exports.addReminder = addReminder;
+module.exports.getReminder = getReminder;
+module.exports.updateReminder = updateReminder;
+module.exports.deleteReminder = deleteReminder;
