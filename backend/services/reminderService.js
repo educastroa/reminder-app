@@ -61,7 +61,6 @@ async function updateReminder(requestBody) {
 
 }
 
-
 async function deleteReminder(requestBody) {
   const username = requestBody.username;
   const SK = requestBody.SK;
@@ -93,7 +92,6 @@ async function deleteReminder(requestBody) {
         });
       }
     );
-
 
   return response;
 }
